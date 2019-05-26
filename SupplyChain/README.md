@@ -30,7 +30,8 @@ npm install
 truffle compile --all
 ```
 ![truffle compile](images/truffle_compile.png)
-This will create the smart contract artifacts in folder ```build\contracts```.
+
+- This will create the smart contract artifacts in folder ```build\contracts```.
 
 ## Running local with Ganache
 - Launch Ganache with the same mnemonic sugestd by the skeleton code:
@@ -44,7 +45,8 @@ ganache-cli -m "spirit supply whale amount human item harsh scare congress disco
 truffle migrate --reset
 ```
 ![truffle migrate local](images/truffle_migrate_local.jpg)
-The address of the SupplyChain contract on local is `0x23e2b13b08a22e9eee431f862ec7a17ab1e99b98` 
+
+- The address of the SupplyChain contract on local is `0x23e2b13b08a22e9eee431f862ec7a17ab1e99b98` 
 and the deployment transaction is `0xf4cc98c8f6d94cda0b0a27452d766aa20a6758fcfe007e89f216c9615bf5dc43`
 
 - Test smart contracts:
@@ -93,19 +95,8 @@ Put this address in the `Assign Roles to Addresses` top section of the DApp, and
 
 - Verfy the events emited by each of these steps:
 Event history for local (ganache-cli) run :
+![events local](images/transact_hist_local.jpg)
 
-	FarmerAdded - 0xe8b958026a1fb97e7c8b8e1e8bb6133c6e66813a80d9f1bc0cf1027ef1bc1fc4
-	DistributorAdded - 0xb646c7cc794e57f9ab14ef402bb4d98a9b760eee9b3a4699bcdd283717af9c14
-	RetailerAdded - 0x42c3d3ee83be0455806ae3ba9a500ddd1591dd4106d66660ec73ac0f513b2a77
-	ConsumerAdded - 0x465f029fa095e82bb57f3f1cd700b8d7c5bc9eb714717250f14389a10ddc0cc0
-	Harvested - 0x434833f001e638ff6114156411678ac16ff8a7631d316f1a193f741726a58388
-	Processed - 0xf1a1621231aef33358a037e35b87209d28aab02ef709d477a15dc2a032bf876d
-	Packed - 0xd5489523d0231eb2636bb4a9c1aff529d1a83ff3f39fe7fc1937a4a9e93cbc32
-	ForSale - 0xfe43db6721d3d48aaf38e20fa18aa1cd44bd911aa47a648885fa4b2a9a88559d
-	Sold - 0xbb1a1e73527c13db235dfce50be4e3bb407da7400b8e4b84467c86b6e5d916b8
-	Shipped - 0x7f5f21c5488f7bbc9b693d6785be4247e08d37f400ba5a282ece63ea2a5880f3
-	Received - 0xb868250b9bac313a63377fea2951122f75d2b5b98d9925ccd6bbf3b0dc448ea9
-	Purchased - 0x1b711cdf563e75acf13bd78a1b55bbd4108b256e2782928c81fc1175a8ceab7f
 
 ## Deploying the smart contracts on Rinkeby testnet:
 
@@ -116,7 +107,8 @@ Event history for local (ganache-cli) run :
 truffle.cmd migrate --reset --network rinkeby
 ```
 ![truffle migrate Rinkeby](images/truffle_migrate_rinkeby.jpg)
-The address of the SupplyChain contract on Rinkeby is `0x7261fdb838621dd353c807b8a0c6fccbfc5b334f` 
+
+- The address of the SupplyChain contract on Rinkeby is `0x7261fdb838621dd353c807b8a0c6fccbfc5b334f` 
 and the deployment transaction is `0x3f63819ffb695fa0c0cc2cdec2bb752204b4a4329928485e2f2552a602cb9ba1`
 
 Rinkeby smart contract addresses:
@@ -128,7 +120,7 @@ Rinkeby smart contract addresses:
 | DistributorRole |  0xcf1fb81fe238f8576453db7ccd1b8ba6edded2e8  |
 | RetailerRole    |  0xc5501a9cf124aae043c8dbe2631a6a8d1592c3c7  |
 | ConsumerRole    |  0x26634cccc4229f14f86aaeb4405c6002191110db  |
-|-----------------|----------------------------------------------|
+
 
 ## Running on Rinkeby
 
