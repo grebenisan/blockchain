@@ -1,0 +1,43 @@
+ganache-cli -m "spirit supply whale amount human item harsh scare congress discover talent hamster"
+
+Available Accounts
+==================
+(0) 0x27d8d15cbc94527cadf5ec14b69519ae23288b95 (~100 ETH)
+(1) 0x018c2dabef4904ecbd7118350a0c54dbeae3549a (~100 ETH)
+(2) 0xce5144391b4ab80668965f2cc4f2cc102380ef0a (~100 ETH)
+(3) 0x460c31107dd048e34971e57da2f99f659add4f02 (~100 ETH)
+(4) 0xd37b7b8c62be2fdde8daa9816483aebdbd356088 (~100 ETH)
+(5) 0x27f184bdc0e7a931b507ddd689d76dba10514bcb (~100 ETH)
+(6) 0xfe0df793060c49edca5ac9c104dd8e3375349978 (~100 ETH)
+(7) 0xbd58a85c96cc6727859d853086fe8560bc137632 (~100 ETH)
+(8) 0xe07b5ee5f738b2f87f88b99aac9c64ff1e0c7917 (~100 ETH)
+(9) 0xbd3ff2e3aded055244d66544c9c059fa0851da44 (~100 ETH)
+
+Private Keys
+==================
+(0) 0x9137dc4de37d28802ff9e5ee3fe982f1ca2e5faa52f54a00a6023f546b23e779
+(1) 0x18911376efeff48444d1323178bc9f5319686b754845e53eb1b777e08949ee9b
+(2) 0xf948c5bb8b54d25b2060b5b19967f50f07dc388d6a5dada56e5904561e19f08b
+(3) 0xfad19151620a352ab90e5f9c9f4282e89e1fe32e070f2c618e7bc9f6d0d236fb
+(4) 0x19d1242b0a3f09e1787d7868a4ec7613ac4e85746e95e447797ce36962c7f68b
+(5) 0x3bb675f8c07099816e23a3e283090cfb0f793ab625b73ca51a2d027a3c1f2d0e
+(6) 0x0faf45306c7daf14d86c266690ce54490e8c0104154cafa87d9e93724efc239d
+(7) 0xf2a921dee0ebd7bfaba1a271bcd48c99baa6341a1cdf84ba843521a5555e0273
+(8) 0x62734594840dade92a24448c8f676cc3c59fd68909837303417295f2c0f27963
+(9) 0xc29afb730456eb83415046550faf8065c8531765396156db8d97fd1fd64c6a6e
+
+HD Wallet
+==================
+Mnemonic:      spirit supply whale amount human item harsh scare congress discover talent hamster
+Base HD Path:  m/44'/60'/0'/0/{account_index}
+
+Gas Price
+==================
+20000000000
+
+Gas Limit
+==================
+6721975
+
+Listening on 127.0.0.1:8545
+
