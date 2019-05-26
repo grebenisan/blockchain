@@ -11,6 +11,8 @@ A Distributor can buy the item from the farmer and ship it to a Retailer. Then, 
 - Solidity v0.4.25 (solc-js)
 - Truffle hdwallet provider 1.0.5
 - Lite-server 2.4.0
+- Node v10.15.1
+
 
 Development done on Windows 10, with Visual Studio Code
 
