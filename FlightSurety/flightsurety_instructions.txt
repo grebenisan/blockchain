@@ -1,0 +1,20 @@
+npm uninstall -g truffle
+npm install -g truffle@5.0.2
+
+
+https://github.com/brenj/flight-surety/
+https://github.com/stevenhankin/FlightSurety
+https://github.com/tobiassteidle/BDND_Flightsurety
+https://github.com/Howlla/FlightSurety
+
+
+https://github.com/JuanSenoret/flightsurety-ethereum
+https://github.com/JuanSenoret/ethereum-oracles
+https://github.com/JuanSenoret/flight-surety-angular-hapi
+
+https://github.com/milescw/udbcd-flight-surety
+https://github.com/jungleBadger/FlightSuretyDAPP
+
+
+
+https://github.com/tobiassteidle/BDND_Capstone
