@@ -961,12 +961,12 @@ contract('Flight Surety Tests', async (accounts) => {
 
           // Submit a response...it will only be accepted if there is an Index match
           await config.flightSuretyApp.submitOracleResponse(oracleIndexes[idx], first_airline, flight, departure, STATUS_CODE_ON_TIME, { from: accounts[i] });
-          console.log('\OK oracle # ', i, ' with index #: ', oracleIndexes[idx].toNumber(), ' flight: ', flight, 'departure: ', departure);
+          console.log('\OK oracle # ', i, ' with index #: ', oracleIndexes[idx].toNumber(), ' flight: ', flight, ', departure: ', departure);
 
         }
         catch(err) {
           // Enable this when debugging
-          // Commented out because there are a lot of rejects
+          // Commented out because there are a lot of rejects for the non-matching indexes
           // console.log('\nReject oracle # ', i, ' with index #: ', oracleIndexes[idx].toNumber(), ' flight: ', flight, 'departure: ', departure, 'Error: ', err);
           // reverted = true;
         }

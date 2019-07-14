@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.24; // ^0.4.25
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -28,13 +28,14 @@ contract FlightSuretyData {
         uint votesCnt;   // not necessary   // number of total votes for each airline
         uint votesTrueCnt;                  // number of "Yes" votes for each airline
         mapping(address => bool) voters;    // list of voters for each airline
+       // mapping(bytes32 => string) flight_names;
     }
     mapping(address => Airline) private airlines;
 
 
     struct Flight {
-        string flight;
-        address airline;
+        address airlineAddress;  // place the address here
+        string flightName;    // tris struct member generates an internal EVM error when calling from the Dapp
         bool isRegistered; // not necessary, should remove it
         uint8 statusCode;
         uint256 insured_traveler_cnt; // total number of insured travelers. Used to loop through and give credits
@@ -52,7 +53,7 @@ contract FlightSuretyData {
         bool isCredited;
     }
 
-    // this mapping maps the key of each flight to a list of Insu:
+    // this mapping maps the key of each flight to a list of Insurance:
     // mapping(bytes32 => Insurance) private insurances; // the key is not the insurance key but the flight key
 
     // each flight key mapped to a mapping of traveler addresses, each traveler mapped to an insurance
@@ -98,10 +99,17 @@ contract FlightSuretyData {
         contractOwner = msg.sender;
         authorizedCaller[msg.sender] = true;
         authorizedCaller[firstAirline] = true;
-        airlines[firstAirline] = Airline({airlineAddress: firstAirline, airlineName: 'First Airline', isRegistered: true, isFunded: true, votesCnt: 0, votesTrueCnt: 0 });
+        airlines[firstAirline] = Airline({
+            airlineAddress: firstAirline,
+            airlineName: 'First Airline',
+            isRegistered: true,
+            isFunded: true,
+            votesCnt: 0,
+            votesTrueCnt: 0
+        });
         airlinesCnt = 1;
         airlinesRegisteredCnt = 1;
-        creditMultiplier = 10;  // because it gets divided by 10. In the testing, we're setting this to 15
+        creditMultiplier = 15;  // default is 1.5 because it gets divided by 10. In the testing, we're setting this to 15
         votingTheshold = 50; // In the real world, this should be set by the data contract
     }
 
@@ -407,18 +415,43 @@ contract FlightSuretyData {
 
     // Register a new flight for a registered airline
     function registerFlight(
-        address _airline,
-        string _flight,
-        uint256 _departure
+        address airline_addr,
+        string flight_str,
+        uint256 departure_epoch
     )
         external
         requireIsOperational
         requireAuthorizedCaller
-        requireAirlineIsRegistered(_airline)
-        requireAirlineIsFunded(_airline)
+        requireAirlineIsRegistered(airline_addr)
+        requireAirlineIsFunded(airline_addr)
     {
-        bytes32 flightKey = getFlightKey(_airline, _flight, _departure);
-        flights[flightKey] = Flight({flight: _flight, airline: _airline, isRegistered: true, departureTimestamp: _departure, insured_traveler_cnt: 0, statusCode: STATUS_CODE_ON_TIME});
+        // uint256 empty = 0;
+        bytes32 flightKey = getFlightKey(airline_addr, flight_str, departure_epoch);
+
+        //airlines[airline_addr].flight_names[flightKey] = flight_str;
+
+        flights[flightKey] = Flight({
+            airlineAddress: airline_addr,  // place the airline name here
+            flightName: flight_str, // this struct member generates an internal EVM error when calling from the Dapp:
+            // "VM Exception while processing transaction: revert"
+            isRegistered: true,
+            departureTimestamp: departure_epoch,    // departure_epoch
+            insured_traveler_cnt: 0,    // empty
+            statusCode: STATUS_CODE_ON_TIME
+        });
+
+        //flight_names[flightKey] = flight_str; // replacing the flightName: flight_str of the flights struct with this mapping
+/*
+        flights[flightKey] = Flight({
+            airlineAddress: address(0x0),  // airline_addr // place the airline name here
+            flightName: '', // place the airline address here
+            isRegistered: false,
+            departureTimestamp: 0,    // departure_epoch
+            insured_traveler_cnt: 0,    // empty
+            statusCode: 0   // STATUS_CODE_ON_TIME
+        });
+*/
+
     }
 
     // Updates the status of an existing flight

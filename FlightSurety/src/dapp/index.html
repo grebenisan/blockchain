@@ -19,13 +19,122 @@
         </button>
     </nav>
 
-    <main class="container">
 
-        <div id="display-wrapper" class="top-20">
+    <main class="container top-70">
+
+
+        <div id="display-wrapper" class="top-10">
         </div>
-        <div class="row top-20">
-            <label class="form">Flight</label> <input type="text" id="flight-number"> <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+
+ 
+        <div class="row top-20 div_backcolor">
+            <label>Set Insurance Credit Multiplier:&nbsp;</label> 
+            <input type="text" id="credit-multiplier"/>
+            <btn class="btn btn-primary" id="set-credit-multiplier">Set Credit Multiplier</btn>
+        </div>        
+
+
+        <div class="row top-10 div_backcolor">
+
+                <label>Create (invite) Airline:&nbsp;</label> 
+                <input class="input_width" type="text" id="invited-airline"/> 
+                <label>Inviting Airline:&nbsp;</label> 
+                <input class="input_width" type="text" id="inviting-airline"/>
+                <label>New Airline name:&nbsp </label>
+                <input type="text" id="airline-name"/>             
+                <btn class="btn btn-primary" id="add-airline">Add Airline</btn>
+
         </div>
+    
+        <hr>
+        <div class="row top-20 div_backcolor">
+
+                <label>Fund Airline:&nbsp;</label> 
+                <input class="input_width" type="text" id="funded-airline"/> 
+                <label>Fund value (ether):&nbsp;</label> 
+                <input type="text" id="funded-value"/>
+                <btn class="btn btn-primary" id="fund-airline">Fund Airline</btn>
+
+        </div>
+
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Vote for Airline:&nbsp;</label> 
+            <input class="input_width" type="text" id="voted-airline"/> 
+            <label>Voting Airline:&nbsp;</label> 
+            <input class="input_width" type="text" id="voting-airline"/>
+            <btn class="btn btn-primary" id="vote-yes">Vote YES</btn>&nbsp;
+            <btn class="btn btn-primary" id="vote-no">Vote NO</btn>
+        </div>        
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+                
+                <label>Register new Flight:&nbsp;</label> 
+                <input type="text" id="flight-name"/> 
+                <label>For Airline:&nbsp;</label> 
+                <input class="input_width" type="text" id="flight-airline"/>                 
+                <label>Departure (mm-dd-yyyy hh:MM:ss):&nbsp;</label> 
+                <input type="text" id="departure-str"/>
+                <btn class="btn btn-primary" id="register-flight">Register Flight</btn>
+
+        </div>
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Buy Insurance for Flight:&nbsp;</label> 
+            <input type="text" id="insure-flight-name"/> 
+            <label>Airline:&nbsp;</label> 
+            <input class="input_width" type="text" id="insure-airline"/>                 
+            <label>Departure (mm-dd-yyyy hh:MM:ss):&nbsp;</label> 
+            <input type="text" id="insure-departure-str"/>
+            <label>Traveler:&nbsp;</label> 
+            <input class="input_width" type="text" id="insure-traveler"/>
+            <label>Insurance value (ether):&nbsp;</label> 
+            <input type="text" id="insure-value"/>             
+            <btn class="btn btn-primary" id="insure-flight">Insure Flight</btn>
+        </div>      
+        
+        <hr>       
+        <div class="row top-20 div_backcolor">
+            <label>Update Flight:&nbsp;</label> 
+            <input type="text" id="update-flight"/> 
+            <label>Of Airline:&nbsp;</label> 
+            <input class="input_width" type="text" id="update-airline"/>                 
+            <label>Departure (mm-dd-yyyy hh:MM:ss):&nbsp;</label> 
+            <input type="text" id="update-departure-str"/>
+            <label>Flight status:&nbsp;</label>
+            <select id="new-flight-status">
+                <option value="10">ON_TIME</option>
+                <option value="20">LATE_AIRLINE</option>
+                <option value="30">LATE_WEATHER</option>
+                <option value="40">LATE_TECHNICAL</option>
+                <option value="50">LATE_OTHER</option>
+              </select> &nbsp;
+            <btn class="btn btn-primary" id="update-flight-status">Update Flight Status</btn>
+        </div>
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Traveler - cash the credit:&nbsp;</label> 
+            <input class="input_width" type="text" id="cash-traveler"/>
+            <btn class="btn btn-primary" id="cash-credit">Cash the credit of Traveler</btn>
+        </div>
+
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Fetch status for Flight:&nbsp;</label> 
+            <input type="text" id="fetch-flight">
+            <label>Of Airline:&nbsp;</label> 
+            <input class="input_width" type="text" id="fetch-airline"/>                 
+            <label>Departure (mm-dd-yyyy hh:MM:ss):&nbsp;</label> 
+            <input type="text" id="fetch-departure-str"/>            
+            <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+        </div>
+
+
     </main>
 
 </body>

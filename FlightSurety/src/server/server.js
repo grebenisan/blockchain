@@ -36,16 +36,14 @@ function generateStatusCode() {
 //console.log('appAddress: ' + config.appAddress.toString());
 //console.log('dataAddress: ' + config.dataAddress.toString());
 
-
-
 /*********************************************************************************************************/
 // register the oracles
 /*********************************************************************************************************/
 web3.eth.getAccounts((error, accounts) => {
 
-//  debug - get the addresess, even though they are in the config file
-console.log('Address of the Data contract: ', JSON.stringify(flightSuretyData));
-console.log('Address of the App contract: ', JSON.stringify(flightSuretyApp));
+// debug - get the addresess, even though they are in the config file
+// console.log('Address of the Data contract: ', JSON.stringify(flightSuretyData));
+// console.log('Address of the App contract: ', JSON.stringify(flightSuretyApp));
 
   // make sure enough accounts
   if(accounts.length < ORACLES_ADDRESS_OFFSET + ORACLES_COUNT) {
@@ -54,7 +52,8 @@ console.log('Address of the App contract: ', JSON.stringify(flightSuretyApp));
     console.log('Number of acounts: ' + accounts.length); // debug
   }
 
-  // authorize this caller - this may not be necessary, because
+  // authorize the App contract - not necessary anymore because the App contract is/was authorized during the deployment
+/*
   flightSuretyData.methods
     .authorizeCaller(config.appAddress)
     .send({ from: accounts[0] }, (error, result) => {
@@ -64,6 +63,7 @@ console.log('Address of the App contract: ', JSON.stringify(flightSuretyApp));
         console.log("appAddress is now registered as an authorized caller.");
       }
     });  
+*/
 
     // get registration fee and register oracles
     flightSuretyApp.methods
@@ -80,7 +80,7 @@ console.log('Address of the App contract: ', JSON.stringify(flightSuretyApp));
         for( let i = ORACLES_ADDRESS_OFFSET; i < ORACLES_ADDRESS_OFFSET + ORACLES_COUNT; i++) {
           flightSuretyApp.methods
             .registerOracle()
-            .send({ from: accounts[i], value: registration_fee, gas: 3000000}, (oreg_error, oreg_result) => {
+            .send({ from: accounts[i], value: registration_fee, gas: 650000}, (oreg_error, oreg_result) => {
               if(oreg_error) {
                 console.log('Error registering oracle at count ' + i + ' : ' + oreg_error);
               } else {
@@ -142,34 +142,37 @@ flightSuretyApp.events.OracleRequest(
       if (error) 
       { console.log('Error from the OracleRequest event : ' + error); } 
       else {
-        console.log("OracleRequest event received: " + event);
+        // console.log("OracleRequest event received!"); //  + event // debug
         // const eventValues = event.returnValues;
 
         const index = event.returnValues.index;
         const airline = event.returnValues.airline;
         const flight = event.returnValues.flight;
         const timestamp = event.returnValues.timestamp;
+
+        console.log("OracleRequest event received for index: ", index);
         // const statusCode = generateStatusCode();
 
         for(let i = 0; i < oracles.length; i++) 
         {
           if(oracles[i].indexes.includes(index)) 
           {
-            console.log('This oracle has this index: ' + index + '! Oracle details: ' + JSON.stringify(oracles[i]));
+            // debug
+            //console.log('This oracle has this index: ' + index + '! Oracle details: ' + JSON.stringify(oracles[i]));
 
             // generate a new status code
             let statusCode = generateStatusCode();
-            console.log('New status code: ' + statusCode);  // debug
+            // console.log('New status code: ' + statusCode);  // debug
 
             // now this oracle submits the response
             flightSuretyApp.methods
               .submitOracleResponse(index, airline, flight, timestamp, statusCode)
-              .send({ from: oracles[i].address, gas: 200000 }, (error, result) => {
+              .send({ from: oracles[i].address, gas: 650000 }, (error, result) => {
                 if(error) {
                   console.log('Error submitting oracle response: ' + error);
                   console.log('Oracle error details: ' + JSON.stringify(oracles[i]));
                 } else {
-                  console.log("Success sending oracle response: " + JSON.stringify(oracles[i]) + " Status Code: " + statusCode);
+                  console.log("Success submit oracle response: " + JSON.stringify(oracles[i]) + " Status Code: " + statusCode);
                 }
               });
 
