@@ -284,6 +284,7 @@ This voting mechanism proves the implementation of the multi-party consensus!
 ## Packages and software used
 
 - Truffle v5.0.9 (core: 5.0.9)
+- Ganache UI v1.3.0
 - Solidity - ^0.4.24 (solc-js)
 - Node v10.15.1
 - Web3.js v1.0.0-beta.37
