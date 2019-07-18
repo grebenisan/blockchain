@@ -36,11 +36,11 @@ The testing and validation of this application was done on a local blockchain an
 - number of accounts: 50
 - gas limit:    9999999
 
-address[0] - 0x627306090abaB3A6e1400e9345bC60c78a8BEf57 - the owner of the contracts
-address[1] - 0xf17f52151EbEF6C7334FAD080c5704D77216b732 - the "First Airline" 
-address[2]  ... address[10] - airlines
-address[11] ... address[20] - travelers
-address[21] ... address[40] - oracles
+- address[0] - 0x627306090abaB3A6e1400e9345bC60c78a8BEf57 - the owner of the contracts
+- address[1] - 0xf17f52151EbEF6C7334FAD080c5704D77216b732 - the "First Airline" 
+- address[2]  ... address[10] - airlines
+- address[11] ... address[20] - travelers
+- address[21] ... address[40] - oracles
 
 
 ## Install
@@ -204,6 +204,20 @@ Also, in the display are of the UI, you can see the transaction ID of this actio
 Please note in Ganache, the account balance of the travele's address decreased with the same amount as the one payed for buying this flight insurance.
 
 
+### Buy insurance by selecting a registered flight from a list (of previously registered flights)
+1. Select a flight from the list of flights that were registered previously
+2. Enter the address of the traveler buying insurance: `0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef` or any addess from the range  address(11) ... address(20) - reserved for travelers.
+3. Enter the insurance value (in ether) - more than 0 and smaller or equal to 1 - (entered "1")
+4. Click the "Insure Selected Flight" button
+
+![Buy insurance from list of flights](images/FS_sel_buy_insurance.png)
+
+See in the console of the browser the message "Success buying insurance!"
+Also, in the display are of the UI, you can see the transaction ID of this action.
+
+Please note in Ganache, the account balance of the travele's address decreased with the same amount as the one payed for buying this flight insurance.
+
+
 ### Update the status of a flight
 
 1. Enter the flight name/ID to update the flight status. Use the same value as you entered above ("ABC")
@@ -217,6 +231,23 @@ Please note in Ganache, the account balance of the travele's address decreased w
 
 See in the console of the browser the message "Success updating the flight status!"
 Also, in the display are of the UI, you can see the transaction ID of this action.
+
+If a traveler purchased previously insurance for a flight who's status has updated to LATE_AIRLINE, you can check the credit of thir traveler right after updating the flight status:
+
+![Update flight status](images/FS_update_stat.png)
+
+
+
+### Check the credit available to a traveler
+
+1. Eneter the address of the traveler you want to check the credit. Use an address used before to buy insurance for a flight who's status has changed to LATE_AIRLINE.
+2. Click on the "Check the credit of Traveler" button
+
+![Check the credit available](images/FS_check_credit.png)
+
+See on the screen the amount of credit for this traveler, available for withdraw.
+See in the console of the browser the message "Success credit availale for traveler!"
+
 
 
 ### Traveler cashing the credit
