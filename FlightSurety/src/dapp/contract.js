@@ -7,9 +7,9 @@ export default class Contract {
     constructor(network, callback) {
 
         let config = Config[network];
-        this.web3 = new Web3(new Web3.providers.HttpProvider(config.url));
+        // this.web3 = new Web3(new Web3.providers.HttpProvider(config.url));
 
-        //this.web3 = new Web3(new Web3.providers.WebsocketProvider(config.url.replace('http', 'ws')));
+        this.web3 = new Web3(new Web3.providers.WebsocketProvider(config.url.replace('http', 'ws')));
         this.flightSuretyApp = new this.web3.eth.Contract(FlightSuretyApp.abi, config.appAddress);
         this.flightSuretyData = new this.web3.eth.Contract(FlightSuretyData.abi, config.dataAddress);
         this.initialize(callback);
@@ -186,11 +186,31 @@ export default class Contract {
                     // alert('Error buying insurance: ' + error);
                 } else {
                     console.log('Success buying insurance!');
-                    callback(error, result); 
+                    callback(result); 
                 }                
             });       
 
     }
+
+
+
+    async buyInsuranceByFlightName( _flight_index, _traveler, _insure_value, callback)
+    {
+        let self = this;
+
+        self.flightSuretyApp.methods
+        .buyInsuranceByFlightName(_flight_index, _traveler)  
+        .send({ from: _traveler, value: self.web3.utils.toWei(_insure_value, "ether") , gas:650000}, (error, result) => {
+            if(error) {
+                console.log('Error buying insurance from selected flight: ', error);
+                // alert('Error buying insurance: ' + error);
+            } else {
+                console.log('Success buying insurance for selected flight!');
+                callback(result); 
+            }                
+        });       
+    }
+
     
 
     // change flight status
@@ -226,6 +246,30 @@ export default class Contract {
     }
 
 
+
+    async checkTravelerCredit( _traveler, callback) {
+        let self = this;
+        let payload = {traveler: _traveler};
+
+        self.flightSuretyApp.methods
+        .checkTravelerCredit(payload.traveler)
+        .call({ from: payload.traveler}, (error, result) => {
+            if(error) {
+                console.log('Error checking the credit of the traveler: ', error);
+                // alert('Error cashing the credit of the traveler: ' + error);
+            } else {
+                let av_credit = self.web3.utils.fromWei(result, "ether")
+                console.log('Available credit for traveler: ', av_credit);
+                callback(error, av_credit); 
+            }                                            
+        });
+
+    }
+
+
+
+
+
     async travelerCashCredit( traveler, callback ) {
         let self = this;
         let payload = {traveler: traveler};
@@ -245,6 +289,25 @@ export default class Contract {
     }
 
 
+    async cashCredit( traveler, callback ) {
+        let self = this;
+        let payload = {traveler: traveler};
+
+        self.flightSuretyApp.methods
+        .cashCredit(payload.traveler)
+        .send({from: payload.traveler, gas:650000}, (error, result) => {
+            if(error) {
+                console.log('Error cashing the credit of the traveler: ', error);
+                // alert('Error cashing the credit of the traveler: ' + error);
+            } else {
+                console.log('Success cashing the credit of the traveler: ', result.toString());
+                callback(error, result); 
+            }                                            
+        });
+
+    }    
+
+
     async fetchFlightStatus(airline, flight, departure_str, callback) {
         let self = this;
 
@@ -254,23 +317,47 @@ export default class Contract {
         let payload = {
             airline: airline,
             flight: flight,
-            departure: dep_epoch
+            timestamp: departure_str
         };
 
         self.flightSuretyApp.methods
-            .fetchFlightStatus(payload.airline, payload.flight, payload.departure)
+            .fetchFlightStatus(payload.airline, payload.flight, dep_epoch)
             .send({ from: self.owner, gas:650000}, (error, result) => {
                 if(error) {
                     console.log('Error fetching the flight status: ', error);
                     // alert('Error cashing the credit of the traveler: ' + error);
                 } else {
                     console.log('Success fetching the flight status!');
-                    callback(error, result); 
-                    //callback(error, payload);
+                    // callback(error, result); 
+                    callback(error, payload);
                 }                                                  
             });
             
     }
+
+    async ListenForFlightRegistered(callback)
+    {
+        let self = this;
+
+        self.flightSuretyData.events.FlightRegistered(
+            { fromBlock: 0 }, 
+            function (error, event) 
+            {
+                if (error) 
+                    { console.log('Error from the FlightRegistered event : ' + error); } 
+                else 
+                {
+                    const flightName = event.returnValues.flight_name;
+                    const flightIdx = event.returnValues.flight_idx;
+                    // console.log("FlightRegistered event received for flight: ", flightName); // debug
+                    callback( flightName, flightIdx);
+                }
+            }
+        );
+
+    }
+
+
 
 
 }

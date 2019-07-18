@@ -27,6 +27,23 @@ import './flightsurety.css';
             }                
         });               
 
+
+        // listen for the FlightRegistered event
+        contract.ListenForFlightRegistered((flight, idx) => {
+            console.log('Success receiving FlightRegistered event in the Dapp for flight ', flight, ' and index ', idx.toString());
+
+            //let select_flight_key = DOM.elid('select-flight-name').value.trim();
+            //let select_flight_name = DOM.elid('select-flight-name').text.trim();
+            let select_flight_dom = DOM.elid('select-flight-name');
+            // daySelect.options[daySelect.options.length] = new Option('Text 1', 'Value1');
+
+            // add a new entry in this select bof, for this registered flight 
+            select_flight_dom.options[select_flight_dom.options.length] = new Option(flight, idx.toString());
+            // this select box is used later-on for buying insurance from the list of already registered flight
+
+        });
+
+        
         // Set the insurance credit multiplier
         DOM.elid('set-credit-multiplier').addEventListener('click', () => {
             let credit_multiplier = DOM.elid('credit-multiplier').value.trim();
@@ -131,8 +148,10 @@ import './flightsurety.css';
         });
         
  
-        
-        // Buy insurance
+        /*******************************************************************************************
+         * Buy insurance for a registered flight
+         * Input all the fields defining a flight - airline, flight name, departure datetime
+        ********************************************************************************************/
         DOM.elid('insure-flight').addEventListener('click', () => {
 
             // _airline, _flight, _departure_str, _traveler, insure_value
@@ -163,6 +182,34 @@ import './flightsurety.css';
         });
 
 
+        /***********************************************************************************************
+         * Buy insurance for a flight
+         * Select from a list of registered flights
+        ************************************************************************************************/
+       DOM.elid('insure-sel-flight').addEventListener('click', () => {
+            
+            let select_flight_dom = DOM.elid('select-flight-name');
+            let select_flight_name = select_flight_dom.options[select_flight_dom.selectedIndex].text.trim();
+            let select_flight_idx = DOM.elid('select-flight-name').value.trim();
+            let select_insure_traveler = DOM.elid('select-insure-traveler').value.trim();
+            let select_insure_value = DOM.elid('select-insure-value').value.trim();
+
+            console.log('Selected flight: ', select_flight_name, ' and index: ', select_flight_idx);
+
+            if (isNaN(select_insure_value) == true)
+            {
+                alert('Invalid insurance value format! Please enter a number greater than zero and smaller or equal to 1');
+                return;                
+            }
+
+            // _flight_index, _traveler, _insure_value, callback
+            contract.buyInsuranceByFlightName(select_flight_idx, select_insure_traveler, select_insure_value, (error, result) => {
+                display('Buy Insurance from selected Flight', 'Buy Insurance', [ { label: 'Buy Insurance tx: ', error: error, value: result} ]);
+            });
+ 
+        });
+
+
         // update flight status
         DOM.elid('update-flight-status').addEventListener('click', () => {
             //airline, flight, departure_str, status
@@ -188,6 +235,20 @@ import './flightsurety.css';
         });
 
 
+
+        // check the available credit of traveler
+        DOM.elid('check-credit').addEventListener('click', () => {
+            let check_traveler = DOM.elid('check-traveler').value.trim();
+            // DOM.elid('available-credit')
+
+            contract.checkTravelerCredit( check_traveler, (error, result) => {
+                DOM.elid('available-credit').value = result.toString();
+                display('Check available Credit of Traveler', 'Check credit', [ { label: 'Check credit: ', error: error, value: result} ]);
+            });
+        });
+
+
+
         // Cash the credit of the traveler
         DOM.elid('cash-credit').addEventListener('click', () => {
             let cash_traveler = DOM.elid('cash-traveler').value.trim();
@@ -196,7 +257,12 @@ import './flightsurety.css';
                 display('Cash the Credit of Traveler', 'Cash credit', [ { label: 'Cash credit tx: ', error: error, value: result} ]);
             });
 
+    //        contract.cashCredit( cash_traveler, (error, result) => {
+    //            display('Cash the Credit of Traveler', 'Cash credit', [ { label: 'Cash credit tx: ', error: error, value: result} ]);
+    //        });
+    
         });
+
 
 
         // User-submitted transaction
@@ -216,7 +282,7 @@ import './flightsurety.css';
             }          
 
             // Write transaction
-            contract.fetchFlightStatus(fetch_airline, fetch_flight, fetch_departure_str, (error, result) => {
+            contract.fetchFlightStatus(fetch_airline, fetch_flight, fetch_departure_str, (error, result) => { // error, result
                 display('Oracles', 'Trigger oracles', [ { label: 'Fetch Flight Status', error: error, value: result.flight + ' ' + result.timestamp} ]);
             });
         });

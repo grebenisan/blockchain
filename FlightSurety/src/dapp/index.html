@@ -94,7 +94,24 @@
             <label>Insurance value (ether):&nbsp;</label> 
             <input type="text" id="insure-value"/>             
             <btn class="btn btn-primary" id="insure-flight">Insure Flight</btn>
-        </div>      
+        </div>    
+        
+        
+        <!--    Buy insurance for a flight by selecting from a list of registered flights -->
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Buy Insurance for Flight:</label>&nbsp;
+                <select id="select-flight-name">
+                </select> &nbsp;
+            <label>Traveler:&nbsp;</label> 
+            <input class="input_width" type="text" id="select-insure-traveler"/> 
+            <label>Insurance value (ether):&nbsp;</label> 
+            <input type="text" id="select-insure-value"/>                        
+            <btn class="btn btn-primary" id="insure-sel-flight">Insure Selected Flight</btn>            
+        </div>
+
+
+
         
         <hr>       
         <div class="row top-20 div_backcolor">
@@ -114,6 +131,16 @@
               </select> &nbsp;
             <btn class="btn btn-primary" id="update-flight-status">Update Flight Status</btn>
         </div>
+
+
+        <hr>
+        <div class="row top-20 div_backcolor">
+            <label>Check available Traveler credit:&nbsp;</label> 
+            <input class="input_width" type="text" id="check-traveler"/>
+            <btn class="btn btn-primary" id="check-credit">Check the credit of Traveler</btn>
+            <input type="text" id="available-credit"/>
+        </div>
+        
 
         <hr>
         <div class="row top-20 div_backcolor">

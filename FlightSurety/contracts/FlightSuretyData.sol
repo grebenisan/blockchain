@@ -35,13 +35,23 @@ contract FlightSuretyData {
 
     struct Flight {
         address airlineAddress;  // place the address here
-        string flightName;    // tris struct member generates an internal EVM error when calling from the Dapp
+        string flightName;
         bool isRegistered; // not necessary, should remove it
         uint8 statusCode;
         uint256 insured_traveler_cnt; // total number of insured travelers. Used to loop through and give credits
         uint256 departureTimestamp;
     }
     mapping(bytes32 => Flight) private flights;
+
+
+    struct FlightByIndex {
+        string flightName;
+        bytes32 flightKey;
+    }
+    FlightByIndex[] private flights_by_index;   // list of flight names and the internal key, for easy dapp listing and calling
+
+//    string[] flight_names;
+//    bytes32[] flight_keys;
 
 
     struct Insurance {
@@ -59,34 +69,40 @@ contract FlightSuretyData {
     // each flight key mapped to a mapping of traveler addresses, each traveler mapped to an insurance
     mapping(bytes32 => mapping(address => Insurance)) private flight_insurances;
 
-    
+
+
+
     // mapping of each flight key to a mapping of traveler IDs (the count id of each insured traveler) mapped to the credit of that insured traveler
     // user for looping through all travelers of a delayed flight, to give the credits to the insured travelers
     mapping(bytes32 => mapping(uint256 => uint256)) private flight_travelerId_credits;
 
 
-    // each flight key mapped to a mapping of traveler addresses, each traveler mapped to its ID. 
+    // each flight key mapped to a mapping of traveler addresses, each traveler mapped to its ID.
     // This is a traveler address to ID lookup, for a particular flight
     mapping(bytes32 => mapping(address => uint256)) private flight_traveler_id_lookup;
 
 
-   // each flight key mapped to a mapping of traveler id, each traveler mapped to its address. 
+   // each flight key mapped to a mapping of traveler id, each traveler mapped to its address.
    // This is a reverse lookup, traveler ID to address, for a particular flight
     mapping(bytes32 => mapping(uint256 => address)) private flight_id_traveler_lookup;
 
-    // a traveler may purchase insurance for multiple flights. 
+    // a traveler may purchase insurance for multiple flights.
     // This mapping is to agregate all the credits of all travelers
     mapping(address => uint256) private travelerCredits;
 
     uint256 private airlinesCnt;
     uint256 private airlinesRegisteredCnt;
 
+    uint256 private flightsRegisteredCnt;
+
     uint256 private creditMultiplier;
-    uint private votingTheshold;  // percentage of the voting threshold to pass, to get a new airline registered. 
+    uint private votingTheshold;  // percentage of the voting threshold to pass, to get a new airline registered.
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
     event AddedAirline(string airlineName);
+
+    event FlightRegistered(string flight_name, uint256 flight_idx);
 
     /**
     * @dev Constructor
@@ -109,6 +125,7 @@ contract FlightSuretyData {
         });
         airlinesCnt = 1;
         airlinesRegisteredCnt = 1;
+        flightsRegisteredCnt = 0;
         creditMultiplier = 15;  // default is 1.5 because it gets divided by 10. In the testing, we're setting this to 15
         votingTheshold = 50; // In the real world, this should be set by the data contract
     }
@@ -440,19 +457,47 @@ contract FlightSuretyData {
             statusCode: STATUS_CODE_ON_TIME
         });
 
-        //flight_names[flightKey] = flight_str; // replacing the flightName: flight_str of the flights struct with this mapping
-/*
-        flights[flightKey] = Flight({
-            airlineAddress: address(0x0),  // airline_addr // place the airline name here
-            flightName: '', // place the airline address here
-            isRegistered: false,
-            departureTimestamp: 0,    // departure_epoch
-            insured_traveler_cnt: 0,    // empty
-            statusCode: 0   // STATUS_CODE_ON_TIME
-        });
-*/
+        flights_by_index.push(
+            FlightByIndex({
+                flightName: flight_str,
+                flightKey: flightKey
+            })
+        );
 
+        emit FlightRegistered(flight_str, flightsRegisteredCnt);    // zero based index
+        flightsRegisteredCnt = flightsRegisteredCnt.add(1);
     }
+
+
+
+
+
+    function getRegisteredFlightCnt()
+        external
+        view
+        requireIsOperational
+        requireAuthorizedCaller
+        returns (uint256)
+    {
+        return flightsRegisteredCnt;
+    }
+
+
+
+
+    function getRegisteredFlight( uint256 idx)
+        external
+        view
+        requireIsOperational
+        requireAuthorizedCaller
+        returns (string memory, bytes32)
+    {
+        string memory f_name = flights_by_index[idx].flightName;
+        bytes32 f_key = flights_by_index[idx].flightKey;
+        return (f_name, f_key);
+    }
+
+
 
     // Updates the status of an existing flight
     function updateFlightStatus
@@ -509,10 +554,10 @@ contract FlightSuretyData {
     }
 
 
-   /**
+   /*******************************************************************************************
     * @dev Any number of travelers can buy insurance for any registered flight
     *
-    */
+    *******************************************************************************************/
     function buyInsurance
     (
         address _airline,
@@ -537,10 +582,10 @@ contract FlightSuretyData {
         // flight_insurances[flightKey][_traveler].amount = _amountPremium;
         // flight_insurances[flightKey][_traveler].isInsured = true;
         // flight_insurances[flightKey][_traveler].isCredited = false;
-    
+
         flights[flightKey].insured_traveler_cnt = flights[flightKey].insured_traveler_cnt.add(1);
         uint256 traveler_id = flights[flightKey].insured_traveler_cnt; // the updated insured traveler count is the new traveler ID
-        flight_travelerId_credits[flightKey][traveler_id] = 0; // the credit is zero at the time of buying insurance
+        flight_travelerId_credits[flightKey][traveler_id] = 0; // the credit is zero at the time of buying insurance for this flight
 
         flight_traveler_id_lookup[flightKey][_traveler] = traveler_id; // update the traveler address to ID lookup for insured travelers
         flight_id_traveler_lookup[flightKey][traveler_id] = _traveler; // update the traveler ID to address lookup for insured travelers
@@ -557,6 +602,51 @@ contract FlightSuretyData {
         travelerCredits[_traveler] = travelerCredits[_traveler].add(0);
 
     }
+
+
+    /**************************************************************************************************
+    *
+    *
+    ****************************************************************************************************/
+    function buyInsuranceByFlightName
+    (
+        uint256 _flight_index,
+        address _traveler
+    )
+        external
+        payable
+        requireIsOperational
+        requireAuthorizedCaller
+    {
+
+        bytes32 flightKey = flights_by_index[_flight_index].flightKey;
+
+        require(flights[flightKey].isRegistered, "This flight is not registered yet!");
+
+        // require if the traveler is already insured
+        require(!flight_insurances[flightKey][_traveler].isInsured, "This traveler is already insured!");
+
+        flights[flightKey].insured_traveler_cnt = flights[flightKey].insured_traveler_cnt.add(1);
+        uint256 traveler_id = flights[flightKey].insured_traveler_cnt; // the updated insured traveler count is the new traveler ID
+        flight_travelerId_credits[flightKey][traveler_id] = 0; // the credit is zero at the time of buying insurance for this flight
+
+        flight_traveler_id_lookup[flightKey][_traveler] = traveler_id; // update the traveler address to ID lookup for insured travelers
+        flight_id_traveler_lookup[flightKey][traveler_id] = _traveler; // update the traveler ID to address lookup for insured travelers
+
+        flight_insurances[flightKey][_traveler] = Insurance({
+            traveler: _traveler,
+            amount: msg.value,
+            // amount: _amountPremium,
+            isInsured: true,
+            isCredited: false
+        });
+
+        // initialize the traveler aggregate credit (in case this is the first time)
+        travelerCredits[_traveler] = travelerCredits[_traveler].add(0);
+
+    }
+
+
 
     /**
      *  @dev Credits payouts to insurees
@@ -591,6 +681,8 @@ contract FlightSuretyData {
         flight_travelerId_credits[flightKey][traveler_id] = credit_amount;  // update the credit for each insured traveler of a flight, based on traveler ID
         travelerCredits[_traveler] = travelerCredits[_traveler].add(credit_amount);  //aggregate all the credits for a traveler
     }
+
+
 
     function creditTravelerById
     (
@@ -664,6 +756,25 @@ contract FlightSuretyData {
         travelerCredits[_traveler] = 0;
         _traveler.transfer(credit_val);
     }
+
+
+    function cashCredit(address _traveler)
+        external
+        requireAuthorizedCaller
+        requireIsOperational
+        returns(uint256)
+    {
+        uint256 credit_val = travelerCredits[_traveler];
+        require(credit_val > 0, "No credits available for withdraw");
+        require(address(this).balance > credit_val, "Not enough funds available for payout");
+
+        travelerCredits[_traveler] = 0;
+        _traveler.transfer(credit_val);
+        return credit_val;
+    }
+
+
+
 
    /**
     * @dev Initial funding for the insurance. Unless there are too many delayed flights

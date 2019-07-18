@@ -252,6 +252,28 @@ contract FlightSuretyApp {
     }
 
 
+    function getRegisteredFlightCnt()
+        public
+        view
+        requireIsOperational
+        returns (uint256)
+    {
+        return dataContract.getRegisteredFlightCnt();
+    }
+
+
+    function getRegisteredFlight(uint256 idx)
+        public
+        view
+        requireIsOperational
+        returns (string, bytes32)
+    {
+        return dataContract.getRegisteredFlight(idx);
+    }
+
+
+
+
     function buyInsurance
     (
         address _airline,
@@ -266,6 +288,23 @@ contract FlightSuretyApp {
         require(msg.value > 0 ether && msg.value <= 1 ether, "Insurance amount is not within limits");
         dataContract.buyInsurance.value(msg.value)(_airline, _flight, _departure, _traveler);
     }
+
+
+
+    function buyInsuranceByFlightName
+    (
+        uint256 _flight_index,
+        address _traveler
+    )
+    public
+    payable
+    requireIsOperational
+    {
+        require(msg.value > 0 ether && msg.value <= 1 ether, "Insurance amount is not within limits");
+        dataContract.buyInsuranceByFlightName.value(msg.value)(_flight_index, _traveler);
+    }
+
+
 
 
     function checkTravelerCredit(address _traveler)
@@ -318,6 +357,14 @@ contract FlightSuretyApp {
         dataContract.payTraveler(_traveler);
     }
 
+
+    function cashCredit(address _traveler)
+        external
+        requireIsOperational
+        returns(uint256)
+    {
+        return dataContract.cashCredit(_traveler);
+    }
 
 
    /**
