@@ -320,6 +320,9 @@ When testing this, the random index generated for oracles was 8.
 
 ![Display LATE flight status in Dapp](images/FS_fetch_display_2.png)
 
+10. At this point, you can check flights for which travelers purchased insurance, and see that the travelers got the flight insurance credit accordingly - see the `Check the credit available to a traveler` section above.
+
+
 
 ### Vote for invited airlines (multi party consensus)
 
