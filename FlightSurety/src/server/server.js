@@ -151,6 +151,8 @@ flightSuretyApp.events.OracleRequest(
         const timestamp = event.returnValues.timestamp;
 
         console.log("OracleRequest event received for index: ", index);
+        console.log('Event details:');
+        console.log(event);
         // const statusCode = generateStatusCode();
 
         for(let i = 0; i < oracles.length; i++) 

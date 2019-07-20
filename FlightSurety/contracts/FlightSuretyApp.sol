@@ -350,6 +350,23 @@ contract FlightSuretyApp {
     }
 
 
+
+    function getFlightStatus
+    (
+        address _airline,
+        string _flight,
+        uint256 _departure
+    )
+    public
+    view
+    requireIsOperational
+    returns(uint8)
+    {
+        return dataContract.getFlightStatus(_airline, _flight, _departure);
+    }
+
+
+
     function travelerCashCredit(address _traveler)
     public
     requireIsOperational

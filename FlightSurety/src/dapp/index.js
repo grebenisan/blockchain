@@ -43,6 +43,15 @@ import './flightsurety.css';
 
         });
 
+
+        // listen for OracleRequest event
+        contract.ListenForOracleRequest((tx) => {
+            console.log('Success receiving OracleRequest event in the Dapp!');
+            display('Flight Status Updates from oracles', 'Oracle Request event', [ { label: 'Event tx: ', value: tx} ]);
+
+        });
+
+
         
         // Set the insurance credit multiplier
         DOM.elid('set-credit-multiplier').addEventListener('click', () => {
@@ -283,9 +292,40 @@ import './flightsurety.css';
 
             // Write transaction
             contract.fetchFlightStatus(fetch_airline, fetch_flight, fetch_departure_str, (error, result) => { // error, result
-                display('Oracles', 'Trigger oracles', [ { label: 'Fetch Flight Status', error: error, value: result.flight + ' ' + result.timestamp} ]);
+                display('Oracles', 'Trigger oracles', [ { label: 'Fetch Status of Flight ', error: error, value: result.flight + ' ' + result.timestamp} ]);
             });
         });
+
+
+
+        // get the current flight status of a flight
+        DOM.elid('get-flight-status').addEventListener('click', () => {
+
+            let get_flight = DOM.elid('get-flight').value.trim();
+            let get_airline = DOM.elid('get-airline').value.trim();
+            let get_departure_str = DOM.elid('get-departure-str').value.trim();
+
+            // DOM.elid('current-flight-status').value = result.toString();
+
+            try 
+            {
+                let departure_dt = new Date(get_departure_str);
+            } catch (err) {
+                console.log('Invalid date-time format: ', err);
+                alert('Invalid date-time format: ' + err + '  Please enter as: mm-dd-yyyy hh:MM:ss');
+                return;
+            }          
+
+            // call 
+            contract.getFlightStatus(get_airline, get_flight, get_departure_str, (error, result) => { // error, result
+
+                DOM.elid('current-flight-status').value = result.status;
+                display('Get Flight status', 'Current Flight status', [ { label: 'Flight Status', value: result.code + ' ' + result.status} ]); // error: error,
+            });
+        });        
+
+
+
     
     });
     

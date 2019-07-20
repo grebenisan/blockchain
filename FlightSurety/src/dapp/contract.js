@@ -4,6 +4,8 @@ import Config from './config.json';
 import Web3 from 'web3';
 
 export default class Contract {
+
+
     constructor(network, callback) {
 
         let config = Config[network];
@@ -16,7 +18,41 @@ export default class Contract {
         this.owner = null;
         this.airlines = [];
         this.passengers = [];
+
     }
+
+
+    flightStatusLookup(stat_int){
+        let flight_stat = "UNKNOWN";
+
+        switch(stat_int) {
+            case '0':
+                flight_stat = "UNKNOWN";
+                break;
+            case '10':
+                flight_stat = "ON_TIME";
+                break;
+            case '20':
+                flight_stat = "LATE_AIRLINE";
+                break;
+            case '30':
+                flight_stat = "LATE_WEATHER";
+                break;
+            case '40':
+                flight_stat = "LATE_TECHNICAL";
+                break;
+            case '50':
+                flight_stat = "LATE_OTHER";
+                break;
+            default:
+                flight_stat = "UNKNOWN";           
+        }
+        return flight_stat;
+    }
+
+
+
+
 
     async initialize(callback) {
         this.web3.eth.getAccounts((error, accts) => {
@@ -308,6 +344,7 @@ export default class Contract {
     }    
 
 
+
     async fetchFlightStatus(airline, flight, departure_str, callback) {
         let self = this;
 
@@ -335,6 +372,41 @@ export default class Contract {
             
     }
 
+
+
+    async getFlightStatus(airline, flight, departure_str, callback) {
+        let self = this;
+
+        const departure_dt = new Date(departure_str);
+        const dep_epoch = Math.round(departure_dt.getTime() / 1000);  
+
+        let payload = {
+            airline: airline,
+            flight: flight,
+            timestamp: departure_str
+        };
+
+        self.flightSuretyApp.methods
+            .getFlightStatus(airline, flight, dep_epoch)
+            .call({ from: self.owner }, (error, result) => {
+                if(error) {
+                    console.log('Error getting the status of flight: ', error);
+
+                } else {
+                    // decode the flight status
+                    let flight_stat = {
+                        code: result,
+                        status: this.flightStatusLookup(result)
+                    }
+          
+                    console.log('Success getting the status of flight: ', result);
+                    callback(error, flight_stat);
+                }                                                  
+            });
+    }    
+
+
+
     async ListenForFlightRegistered(callback)
     {
         let self = this;
@@ -358,6 +430,25 @@ export default class Contract {
     }
 
 
+
+    async ListenForOracleRequest(callback)
+    {
+        let self = this;
+
+        self.flightSuretyApp.events.OracleRequest(
+            { fromBlock: 0 }, 
+            function (error, event) 
+            {
+                if (error) 
+                    { console.log('Error from the ListenForOracleRequest event : ' + error); } 
+                else 
+                {
+                    const flightTx = event.transactionHash;
+                    callback( flightTx );
+                }
+            }
+        );        
+    }
 
 
 }

@@ -1,3 +1,4 @@
+
 # FlightSurety
 
 FlightSurety is a flight insurance application project for Udacity's Blockchain nanodegree, build for the Ethereum platform. The application is made of the following components:
@@ -6,6 +7,7 @@ FlightSurety is a flight insurance application project for Udacity's Blockchain 
 - the 28 functional tests
 - the server providing oracles support
 - the distributed app (DApp) providing uer interface to the application
+
 
 ## Business process
 
@@ -71,6 +73,7 @@ Here is the output of the 28 test cases:
 You can see that the output of some tests are expected errors, and these are normal expected errors when testing and asserting conditions that certain situations should not be allowed to happen.
 Capturing these situatoins is the proof of successful tests.
 
+
 ## Migrate the contracts to the local provider
 
 After running the tests, it's a good idea to restart Ganache UI, to reset all accounts and start from fresh. 
@@ -79,6 +82,8 @@ After running the tests, it's a good idea to restart Ganache UI, to reset all ac
 ```
 truffle migrate --reset
 ```
+
+
 ## Run the server
 
 In a separate terminal, run the server:
@@ -111,7 +116,9 @@ To view the Dapp, open a browser, also open the console of the browser:
 http://localhost:8000
 ```
 The browser will load the Dapp UI:
-![Dapp UI](images/FS_dapp.png)
+![Dapp UI 1](images/FS_dapp_1.png)
+![Dapp UI 2](images/FS_dapp_2.png)
+![Dapp UI 3](images/FS_dapp_3.png)
 
 On startup of the Dapp, the status of the applicatin is "Operational"
 
@@ -119,6 +126,7 @@ On startup of the Dapp, the status of the applicatin is "Operational"
 ## Proofing the application
 
 Here are several actions to proof the functionality of the application
+
 
 ### Set the credit multiplier
 In the DApp UI, enter the value "3" for the credit multiplier, and click the button "Set Credit Multiplier"
@@ -205,6 +213,7 @@ Please note in Ganache, the account balance of the travele's address decreased w
 
 
 ### Buy insurance by selecting a registered flight from a list (of previously registered flights)
+
 1. Select a flight from the list of flights that were registered previously
 2. Enter the address of the traveler buying insurance: `0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef` or any addess from the range  address(11) ... address(20) - reserved for travelers.
 3. Enter the insurance value (in ether) - more than 0 and smaller or equal to 1 - (entered "1")
@@ -237,6 +246,21 @@ If a traveler purchased previously insurance for a flight who's status has updat
 ![Update flight status](images/FS_update_stat.png)
 
 
+### Check the flight status of a registered flight
+
+1. In the section "Get Flight Status for flight:" enter the flight name/id to verify the status
+2. Enter the airline address of the flight to verify the status
+3. Enter the timestamp of the flight to verify the status
+4. Click on the button "Get Flight Status"
+
+![Get status of a flight](images/FS_get_flight_stat_1.png)
+
+See in the console of the browser the message "Success getting the status of flinght: xx"
+Also, in the display are of the UI, you can see the flight status of this flight.
+
+By changing the flight status to different statuses, the new statuses can be verified here:
+![Get status of a flight](images/FS_get_flight_stat_2.png)
+
 
 ### Check the credit available to a traveler
 
@@ -247,7 +271,6 @@ If a traveler purchased previously insurance for a flight who's status has updat
 
 See on the screen the amount of credit for this traveler, available for withdraw.
 See in the console of the browser the message "Success credit availale for traveler!"
-
 
 
 ### Traveler cashing the credit
@@ -266,18 +289,36 @@ Please note in Ganache, the account balance of this traveler increased with amou
 
 ### Fetch flight status from oracles
 
-1. Enter the flight name/ID for which to fetch the flight status from oracles (previously set for "ABC")
+1. Enter the flight name/ID for which to fetch the flight status from oracles (example set for "FLY-01")
 2. Enter the airline this flight is registered (previously set for `0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef`)
-3. Enter the departure date of this flight (previously set for "01-02-2020 14:35:00")
+3. Enter the departure date of this flight (example set for "01-01-2020 01:01:01")
 4. Click on the "Submit to Oracles" button
-4. Watch the output of the terminal in which the server is running
 
-![Update flight status](images/FS_fetch_flight_stat.png)
+![Fetch flight status from oracles](images/FS_fetch_flight_stat_0.png)
 
-When testing this, the random index generated for oracles was 5.
+5. Watch the output of the terminal in which the server is running
 This is the output of the server, confirming the event received and the oracle submission.
 
-![Fetch flight status from oracles](images/FS_fetch_flight_stat_server.png)
+![Fetch flight status server response 1](images/FS_fetch_flight_stat_1.png)
+![Fetch flight status server response 1](images/FS_fetch_flight_stat_2.png)
+
+When testing this, the random index generated for oracles was 8.
+
+6. See the display output of the Dapp:
+
+![Display flight status in Dapp](images/FS_fetch_display_1.png)
+
+7. Verify the new status generated by the oracles:
+
+![Verify flight status from oracles](images/FS_get_flight_stat_3.png)
+
+8. Continue to fetch flight status until the random response from the oracles is "LATE_AIRLINE":
+
+![Fetch flight status from oracles LATE](images/FS_fetch_and_get.png)
+
+9. See the display of the new flight status in the Dapp:
+
+![Display LATE flight status in Dapp](images/FS_fetch_display_2.png)
 
 
 ### Vote for invited airlines (multi party consensus)
