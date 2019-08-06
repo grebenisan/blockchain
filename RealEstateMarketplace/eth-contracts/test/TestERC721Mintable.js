@@ -21,14 +21,14 @@ contract('TestERC721Mintable', accounts => {
             // mint 5 tokens for account_one
             for(let i = 1; i < 6; i++)
             {
-                await this.contract.mint(account_one, i);   // , baseURI
+                await this.contract.mint(account_one, i, {from: owner});   // , baseURI
                 _totalSupply = _totalSupply + 1;
             }   
 
             // mint 5 tokens for account_two
             for(let i = 6; i < 11; i++)
             {
-                await this.contract.mint(account_two, i);   // , baseURI
+                await this.contract.mint(account_two, i, {from: owner});   // , baseURI
                 _totalSupply = _totalSupply + 1;
             }                        
         })
