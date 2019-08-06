@@ -1,20 +1,24 @@
 # Real Estate Marketplace - the Udacity Blockchain Developer capstone project
 
 
-The Real Estate Marketplace project is the Udacity Capstone project for the Blockchain Developer nanodegree. It is a decentralized housing system, build on the Ethereum platform. It features Solidity smart contracts compliant with the ERC721 standard for creating un-fungible tokens - in this case, the real estate houses, condos and units for sale, and zero knowledge proofing technology, or zk-SNARKs, build with the Zokrates framework, that enable a much higher security of the token ownership. The zkSNARKs is the perfect technology to enable secure title transfer and ownership in the Real Estate business.
+The Real Estate Marketplace project is the Udacity Capstone project for the Blockchain Developer nanodegree. It is a decentralized housing system, build on the Ethereum platform. It features Solidity smart contracts compliant with the ERC721 standard for creating un-fungible tokens - in this case, the real estate houses, condos and units for sale. This project also features the zero knowledge proofing technology, or zk-SNARKs, build with the ZoKrates framework, enabling a much higher security of the token ownership. The zkSNARKs is the perfect technology to enable secure title transfer and ownership in the Real Estate business.
 
-The demo of this project mints 10 ERC721 unfungible tokens, lists a number of them the for sale on the OpenSea platform, and are purchased from another account, for the full lifecycle of the tokens.
+The demo of this project mints 10 ERC721 unfungible tokens, lists a number of them for sale on the OpenSea platform, and they are purchased from another account, for the full lifecycle of the tokens.
 
 ## Software and packages required
 
 - Node v10.15.1
 - Truffle v5.0.9
+- Ganache 1.3.0
 - Solidity v0.5.0
 - Web3.js v1.0.0-beta.37
-- Zokrates 0.3.0
+- ZoKrates 0.3.0
 - Docker 2.1.0.0
 - truffle-hdwallet-provider 1.0.5
 - OpenZeppelin Solidity 2.2.0
+- JavaScript ECMAScript 6
+- MetaMask 6.7.3
+- Visual Studio Code 1.36
 
 ## Install
 
@@ -39,6 +43,8 @@ To install, download or clone this repo, change in the root directory of the app
     ~/zokrates generate-proof
     ~/zokrates export-verifier
 ```
+Run the proof generation step multiple times to generate multiple proofs, and save each one with a different name.
+This is required when minting multiple tokens, each one gets verified by a unique proof.
 
 ## Compile and migrate
 
@@ -91,7 +97,7 @@ The owner and contract addresses of my deployment are:
 - Owner account:                `0xd6aD3CFb903f109291EAb07c3d97Da8d55f16dbe`
 - Contract Verifier address:    `0x0ce97bC8b1C1885bfE1f0f4cCF69e0542EC3c87D`
 - Contract SolnSquareVerifier:  `0xC33760a78bb2aD7737EF6dceaE0E186f9d9c56aC`
-- Etherscan:    [https://rinkeby.etherscan.io/address/0xc33760a78bb2ad7737ef6dceae0e186f9d9c56ac](https://rinkeby.etherscan.io/address/0xc33760a78bb2ad7737ef6dceae0e186f9d9c56ac)
+- Etherscan: [https://rinkeby.etherscan.io/address/0xc33760a78bb2ad7737ef6dceae0e186f9d9c56ac](https://rinkeby.etherscan.io/address/0xc33760a78bb2ad7737ef6dceae0e186f9d9c56ac)
 
 
 ## Mint the 10 tokens
@@ -121,7 +127,7 @@ Success minting token 10 , Tx: 0x2292d59dffbdf1f586f34f55e5c53590dc982c3fff477a5
 
 ## Add tokens to OpenSea, sell them and buy them from another account:
 
-1. Set my Metamas account: `0xd6ad3cfb903f109291eab07c3d97da8d55f16dbe`
+1. Set my Metamask account: `0xd6ad3cfb903f109291eab07c3d97da8d55f16dbe`
 2. In OpenSea, enter the address of the SolnSquareVerifier smart contract, and load all the minted tokens.
 3. The OpenSea marketplace page for this contract is:
     [https://rinkeby.opensea.io/assets/dg-real-estate-capstone](https://rinkeby.opensea.io/assets/dg-real-estate-capstone)
