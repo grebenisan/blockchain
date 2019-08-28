@@ -3,6 +3,20 @@
 
 The Real Estate Marketplace project is the Udacity Capstone project for the Blockchain Developer nanodegree. It is a decentralized housing system, build on the Ethereum platform. It features Solidity smart contracts compliant with the ERC721 standard for creating un-fungible tokens - in this case, the real estate houses, condos and units for sale. This project also features the zero knowledge proofing technology, or zk-SNARKs, build with the ZoKrates framework, enabling a much higher security of the token ownership. The zkSNARKs is the perfect technology to enable secure title transfer and ownership in the Real Estate business.
 
+At present, property titles are often paper-based, creating opportunities for errors and fraud. Title professionals find defects in 25% of all titles during the transaction process, according to the American Land Title Association.
+
+Any identified defect makes it illegal to transfer a property title to a buyer until it is rectified. This means property owners often incur high legal fees to ensure authenticity and accuracy of their property titles.
+
+Moreover, title fraud poses a risk to homeowners worldwide. US losses associated with title fraud reportedly averaged around $103,000 per case in 2015, compelling many property buyers to purchase title insurance.
+
+These title management issues could potentially be mitigated by using blockchain technology to build immutable digital records of land titles and using blockchain for transparent transactions. This approach could simplify property title management, making it more transparent and helping to reduce the risk of title fraud and the need for additional insurance.
+
+Some companies and governments around the globe have already implemented blockchain technology for the title management process.
+
+Ghanaian blockchain company Bitland has been working on a solution for Ghana, where it is estimated that almost 80% of land is unregistered, according to Forbes. Those that possess unregistered land find it more difficult to prove legal ownership, increasing their exposure to the risk of land seizures or property theft.
+
+Bitland is seeking to create secure digital public records of ownership on its blockchain platform, with the aim of protecting land owners from title fraud. Bitland has expanded to operate in 7 African nations, India, and is also working with Native Americans in the US.
+
 The demo of this project mints 10 ERC721 unfungible tokens, lists a number of them for sale on the OpenSea platform, and they are purchased from another account, for the full lifecycle of the tokens.
 
 ## Software and packages required
@@ -166,4 +180,20 @@ This project was coded and tested with Visual Studio Code 1.36.1, on Windows 10
 * [Open Zeppelin ](https://openzeppelin.org/)
 * [Interactive zero knowledge 3-colorability demonstration](http://web.mit.edu/~ezyang/Public/graph/svg.html)
 * [Docker](https://docs.docker.com/install/)
+
+* [Zero-knowledge Proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
+* [Understand Zero Knowledge Proofing](https://hackernoon.com/eli5-zero-knowledge-proof-78a276db9eff)
+* [Understanding Zero Knowledge Proofing](https://blog.goodaudience.com/understanding-zero-knowledge-proofs-through-simple-examples-df673f796d99)
+
 * [ZoKrates](https://github.com/Zokrates/ZoKrates)
+* [ZoKrates docs](https://zokrates.github.io/)
+* [ZoKrates tutorial](https://zokrates.github.io/sha256example.html)
+
+* [OpenSea](https://docs.opensea.io/docs)
+
+* [Vitalik Buterin paper on zkSNARKs](https://ethresear.ch/t/on-chain-scaling-to-potentially-500-tx-sec-through-mass-tx-validation/3477)
+
+
+# Blockchain Developer nanodegree
+
+![Blockchain Developer nanodegree](images/diploma.jpg)
